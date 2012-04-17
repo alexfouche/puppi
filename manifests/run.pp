@@ -17,14 +17,13 @@
 define puppi::run (
   $project = '' ) {
 
-  require puppi
+  require puppi::params
 
   exec { "Run_Puppi_${name}":
     command => "puppi deploy ${name} && touch ${puppi::params::archivedir}/puppirun_${name}",
     path    => '/bin:/sbin:/usr/sbin:/usr/bin',
     creates => "${puppi::params::archivedir}/puppirun_${name}",
+    require => Class['puppi::is_installed'],
   }
-
-  Puppi::Run[$name] -> Class['puppi::is_installed']
 
 }
